@@ -15,15 +15,26 @@
   "license": "ISC",
   "repository": "sonicdoe/standard-language-server",
   "author": "Jakob Krigovsky <jakob@krigovsky.com>",
-  "files": [],
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "standard && ava"
   },
+  "dependencies": {
+    "standard": "^10.0.3",
+    "vscode-languageserver": "^3.3.0"
+  },
   "devDependencies": {
     "ava": "^0.22.0",
-    "standard": "^10.0.3"
+    "vscode-jsonrpc": "^3.3.1"
   },
   "engines": {
     "node": ">=4"
+  },
+  "standard": {
+    "ignore": [
+      "test/fixtures"
+    ]
   }
 }

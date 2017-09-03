@@ -1,0 +1,29 @@
+{
+  "name": "standard-language-server",
+  "version": "0.0.0",
+  "description": "Language Server for JavaScript Standard Style",
+  "keywords": [
+    "javascript",
+    "standard",
+    "style",
+    "language",
+    "server",
+    "protocol",
+    "langserver",
+    "lsp"
+  ],
+  "license": "ISC",
+  "repository": "sonicdoe/standard-language-server",
+  "author": "Jakob Krigovsky <jakob@krigovsky.com>",
+  "files": [],
+  "scripts": {
+    "test": "standard && ava"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "standard": "^10.0.3"
+  },
+  "engines": {
+    "node": ">=4"
+  }
+}

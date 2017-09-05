@@ -30,7 +30,7 @@
     "vscode-jsonrpc": "^3.3.1"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "standard": {
     "ignore": [

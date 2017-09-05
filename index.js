@@ -24,10 +24,7 @@ function diagnose (uri, text) {
 
     const diagnostics = results.results[0].messages.map(messageToDiagnostic)
 
-    connection.sendDiagnostics({
-      uri: uri,
-      diagnostics: diagnostics
-    })
+    connection.sendDiagnostics({ uri, diagnostics })
   })
 }
 
@@ -41,7 +38,7 @@ function messageToDiagnostic (message) {
   return {
     range: {
       start: {
-        line: line,
+        line,
         character: column
       },
       end: {

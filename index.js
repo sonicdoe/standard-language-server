@@ -2,6 +2,7 @@
 
 const LanguageServer = require('vscode-languageserver')
 const importFrom = require('import-from')
+const path = require('path')
 
 const connection = LanguageServer.createConnection()
 const documents = new LanguageServer.TextDocuments()
@@ -25,7 +26,7 @@ documents.onDidChangeContent(change => {
 })
 
 function diagnose (uri, text) {
-  const standard = getStandard()
+  const standard = getStandard(path.dirname(uri))
 
   standard.lintText(text, (err, results) => {
     if (err) throw err
@@ -36,13 +37,15 @@ function diagnose (uri, text) {
   })
 }
 
-function getStandard () {
-  if (workspaceRoot) {
-    try {
+function getStandard (cwd) {
+  try {
+    if (workspaceRoot) {
       return importFrom(workspaceRoot, 'standard')
-    } catch (err) {
-      if (err.code !== 'MODULE_NOT_FOUND') throw err
     }
+
+    return importFrom(cwd, 'standard')
+  } catch (err) {
+    if (err.code !== 'MODULE_NOT_FOUND') throw err
   }
 
   return require('standard')

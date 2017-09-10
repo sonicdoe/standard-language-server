@@ -19,7 +19,8 @@
     "index.js"
   ],
   "scripts": {
-    "test": "standard && ava"
+    "install-fixtures": "cd test/fixtures/standard-v9 && npm install",
+    "test": "standard && npm run-script install-fixtures && ava"
   },
   "dependencies": {
     "import-from": "^2.1.0",

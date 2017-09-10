@@ -153,3 +153,37 @@ test.cb('supports semistandard', t => {
     t.end()
   })
 })
+
+test.cb('supports happiness', t => {
+  t.context.connection.sendNotification('workspace/didChangeConfiguration', {
+    settings: {
+      standard: {
+        style: 'happiness'
+      }
+    }
+  })
+
+  t.context.connection.sendNotification('textDocument/didOpen', {
+    textDocument: fixtures.happiness.bad
+  })
+
+  t.context.connection.onNotification('textDocument/publishDiagnostics', param => {
+    t.deepEqual(param.diagnostics[0], {
+      range: {
+        start: {
+          line: 0,
+          character: 13
+        },
+        end: {
+          line: 0,
+          character: 13
+        }
+      },
+      severity: 1,
+      code: 'semi',
+      message: 'Missing semicolon.'
+    })
+
+    t.end()
+  })
+})

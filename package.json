@@ -23,6 +23,7 @@
     "test": "standard && npm run-script install-fixtures && ava"
   },
   "dependencies": {
+    "happiness": "^10.0.2",
     "import-from": "^2.1.0",
     "semistandard": "^11.0.0",
     "standard": "^10.0.3",

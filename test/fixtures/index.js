@@ -22,5 +22,11 @@ module.exports = {
       uri: require.resolve('./semistandard/bad'),
       text: fs.readFileSync(require.resolve('./semistandard/bad'), 'utf8')
     }
+  },
+  happiness: {
+    bad: {
+      uri: require.resolve('./happiness/bad'),
+      text: fs.readFileSync(require.resolve('./happiness/bad'), 'utf8')
+    }
   }
 }

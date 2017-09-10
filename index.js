@@ -27,13 +27,17 @@ connection.onInitialize(params => {
 
 connection.onDidChangeConfiguration(change => {
   settings = change.settings.standard
+
+  documents.all().forEach(diagnose)
 })
 
 documents.onDidChangeContent(change => {
-  diagnose(change.document.uri, change.document.getText())
+  diagnose(change.document)
 })
 
-function diagnose (uri, text) {
+function diagnose (textDocument) {
+  const uri = textDocument.uri
+  const text = textDocument.getText()
   const engine = getEngine(path.dirname(uri))
 
   engine.lintText(text, (err, results) => {

@@ -92,6 +92,34 @@ test.cb('prefers standard from workspace over text document’s URI', t => {
   })
 })
 
+test.cb('re-lints all text documents when settings change', t => {
+  t.context.connection.sendNotification('textDocument/didOpen', {
+    textDocument: fixtures.semistandard.bad
+  })
+
+  t.context.connection.sendNotification('workspace/didChangeConfiguration', {
+    settings: {
+      standard: {
+        style: 'semistandard'
+      }
+    }
+  })
+
+  let firstCall = true
+
+  t.context.connection.onNotification('textDocument/publishDiagnostics', param => {
+    if (firstCall) {
+      t.is(param.diagnostics.length, 0)
+
+      firstCall = false
+    } else {
+      t.is(param.diagnostics.length, 1)
+
+      t.end()
+    }
+  })
+})
+
 test.cb('supports semistandard', t => {
   t.context.connection.sendNotification('workspace/didChangeConfiguration', {
     settings: {

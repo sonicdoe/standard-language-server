@@ -1,24 +1,32 @@
 'use strict'
 
 const LanguageServer = require('vscode-languageserver')
-const standard = require('standard')
+const importFrom = require('import-from')
 
 const connection = LanguageServer.createConnection()
 const documents = new LanguageServer.TextDocuments()
 
 documents.listen(connection)
 
-connection.onInitialize(() => ({
-  capabilities: {
-    textDocumentSync: documents.syncKind
+let workspaceRoot
+
+connection.onInitialize(params => {
+  workspaceRoot = params.rootUri
+
+  return {
+    capabilities: {
+      textDocumentSync: documents.syncKind
+    }
   }
-}))
+})
 
 documents.onDidChangeContent(change => {
   diagnose(change.document.uri, change.document.getText())
 })
 
 function diagnose (uri, text) {
+  const standard = getStandard()
+
   standard.lintText(text, (err, results) => {
     if (err) throw err
 
@@ -26,6 +34,18 @@ function diagnose (uri, text) {
 
     connection.sendDiagnostics({ uri, diagnostics })
   })
+}
+
+function getStandard () {
+  if (workspaceRoot) {
+    try {
+      return importFrom(workspaceRoot, 'standard')
+    } catch (err) {
+      if (err.code !== 'MODULE_NOT_FOUND') throw err
+    }
+  }
+
+  return require('standard')
 }
 
 function messageToDiagnostic (message) {

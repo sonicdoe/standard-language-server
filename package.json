@@ -22,6 +22,7 @@
     "test": "standard && ava"
   },
   "dependencies": {
+    "import-from": "^2.1.0",
     "standard": "^10.0.3",
     "vscode-languageserver": "^3.3.0"
   },

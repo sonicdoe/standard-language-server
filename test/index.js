@@ -43,3 +43,20 @@ test.cb('lints good.js', t => {
     t.end()
   })
 })
+
+test.cb('prefers standard from workspace', t => {
+  t.context.connection.sendRequest('initialize', {
+    rootUri: fixtures.standardV9.rootUri
+  })
+
+  t.context.connection.sendNotification('textDocument/didOpen', {
+    textDocument: fixtures.standardV9.good
+  })
+
+  t.context.connection.onNotification('textDocument/publishDiagnostics', param => {
+    // If we correctly required standard v9, we should receive no errors.
+    t.is(param.diagnostics.length, 0)
+
+    t.end()
+  })
+})

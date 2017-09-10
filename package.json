@@ -1,7 +1,7 @@
 {
   "name": "standard-language-server",
   "version": "0.1.0",
-  "description": "Language Server for JavaScript Standard Style",
+  "description": "Language Server for JavaScript Standard Style and other standard-based styles",
   "keywords": [
     "javascript",
     "standard",

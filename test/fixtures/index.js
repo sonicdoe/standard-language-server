@@ -16,5 +16,11 @@ module.exports = {
       uri: require.resolve('./standard-v9/good'),
       text: fs.readFileSync(require.resolve('./standard-v9/good'), 'utf8')
     }
+  },
+  semistandard: {
+    bad: {
+      uri: require.resolve('./semistandard/bad'),
+      text: fs.readFileSync(require.resolve('./semistandard/bad'), 'utf8')
+    }
   }
 }

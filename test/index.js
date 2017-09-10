@@ -91,3 +91,37 @@ test.cb('prefers standard from workspace over text document’s URI', t => {
     t.end()
   })
 })
+
+test.cb('supports semistandard', t => {
+  t.context.connection.sendNotification('workspace/didChangeConfiguration', {
+    settings: {
+      standard: {
+        style: 'semistandard'
+      }
+    }
+  })
+
+  t.context.connection.sendNotification('textDocument/didOpen', {
+    textDocument: fixtures.semistandard.bad
+  })
+
+  t.context.connection.onNotification('textDocument/publishDiagnostics', param => {
+    t.deepEqual(param.diagnostics[0], {
+      range: {
+        start: {
+          line: 0,
+          character: 13
+        },
+        end: {
+          line: 0,
+          character: 13
+        }
+      },
+      severity: 1,
+      code: 'semi',
+      message: 'Missing semicolon.'
+    })
+
+    t.end()
+  })
+})

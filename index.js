@@ -9,6 +9,10 @@ const documents = new LanguageServer.TextDocuments()
 
 documents.listen(connection)
 
+let settings = {
+  style: 'standard'
+}
+
 let workspaceRoot
 
 connection.onInitialize(params => {
@@ -21,14 +25,18 @@ connection.onInitialize(params => {
   }
 })
 
+connection.onDidChangeConfiguration(change => {
+  settings = change.settings.standard
+})
+
 documents.onDidChangeContent(change => {
   diagnose(change.document.uri, change.document.getText())
 })
 
 function diagnose (uri, text) {
-  const standard = getStandard(path.dirname(uri))
+  const engine = getEngine(path.dirname(uri))
 
-  standard.lintText(text, (err, results) => {
+  engine.lintText(text, (err, results) => {
     if (err) throw err
 
     const diagnostics = results.results[0].messages.map(messageToDiagnostic)
@@ -37,18 +45,18 @@ function diagnose (uri, text) {
   })
 }
 
-function getStandard (cwd) {
+function getEngine (cwd) {
   try {
     if (workspaceRoot) {
-      return importFrom(workspaceRoot, 'standard')
+      return importFrom(workspaceRoot, settings.style)
     }
 
-    return importFrom(cwd, 'standard')
+    return importFrom(cwd, settings.style)
   } catch (err) {
     if (err.code !== 'MODULE_NOT_FOUND') throw err
   }
 
-  return require('standard')
+  return require(settings.style)
 }
 
 function messageToDiagnostic (message) {

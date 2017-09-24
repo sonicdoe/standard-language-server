@@ -4,6 +4,7 @@ const LanguageServer = require('vscode-languageserver')
 const importFrom = require('import-from')
 const path = require('path')
 const pkgConf = require('pkg-conf')
+const ignore = require('ignore')
 
 const connection = LanguageServer.createConnection()
 const documents = new LanguageServer.TextDocuments()
@@ -41,6 +42,10 @@ function diagnose (textDocument) {
   const text = textDocument.getText()
   const engine = getEngine(path.dirname(uri))
   const config = getConfig(path.dirname(uri))
+
+  if (ignore().add(config.ignore).ignores(uri)) {
+    return connection.sendDiagnostics({ uri, diagnostics: [] })
+  }
 
   engine.lintText(text, {
     globals: config.globals

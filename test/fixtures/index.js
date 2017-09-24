@@ -34,5 +34,11 @@ module.exports = {
       uri: require.resolve('./globals/good'),
       text: fs.readFileSync(require.resolve('./globals/good'), 'utf8')
     }
+  },
+  ignore: {
+    good: {
+      uri: require.resolve('./ignore/good'),
+      text: fs.readFileSync(require.resolve('./ignore/good'), 'utf8')
+    }
   }
 }

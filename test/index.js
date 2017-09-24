@@ -199,3 +199,15 @@ test.cb('respects `globals` in package.json', t => {
     t.end()
   })
 })
+
+test.cb('respects `ignore` in package.json', t => {
+  t.context.connection.sendNotification('textDocument/didOpen', {
+    textDocument: fixtures.ignore.good
+  })
+
+  t.context.connection.onNotification('textDocument/publishDiagnostics', param => {
+    t.is(param.diagnostics.length, 0)
+
+    t.end()
+  })
+})

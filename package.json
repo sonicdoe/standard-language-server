@@ -19,11 +19,12 @@
     "index.js"
   ],
   "scripts": {
-    "install-fixtures": "cd test/fixtures/standard-v9 && npm install && cd ../globals && npm install",
+    "install-fixtures": "cd test/fixtures/standard-v9 && npm install && cd ../globals && npm install && cd ../ignore && npm install",
     "test": "standard && npm run-script install-fixtures && ava"
   },
   "dependencies": {
     "happiness": "^10.0.2",
+    "ignore": "^3.3.5",
     "import-from": "^2.1.0",
     "pkg-conf": "^2.0.0",
     "semistandard": "^11.0.0",

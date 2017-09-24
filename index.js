@@ -3,6 +3,7 @@
 const LanguageServer = require('vscode-languageserver')
 const importFrom = require('import-from')
 const path = require('path')
+const pkgConf = require('pkg-conf')
 
 const connection = LanguageServer.createConnection()
 const documents = new LanguageServer.TextDocuments()
@@ -39,8 +40,11 @@ function diagnose (textDocument) {
   const uri = textDocument.uri
   const text = textDocument.getText()
   const engine = getEngine(path.dirname(uri))
+  const config = getConfig(path.dirname(uri))
 
-  engine.lintText(text, (err, results) => {
+  engine.lintText(text, {
+    globals: config.globals
+  }, (err, results) => {
     if (err) throw err
 
     const diagnostics = results.results[0].messages.map(messageToDiagnostic)
@@ -61,6 +65,14 @@ function getEngine (cwd) {
   }
 
   return require(settings.style)
+}
+
+function getConfig (cwd) {
+  if (workspaceRoot) {
+    return pkgConf.sync(settings.style, { cwd: workspaceRoot })
+  }
+
+  return pkgConf.sync(settings.style, { cwd })
 }
 
 function messageToDiagnostic (message) {
